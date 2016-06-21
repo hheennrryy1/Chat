@@ -13,6 +13,7 @@ import javax.websocket.server.ServerEndpoint;
 //该注解用来指定一个URI，客户端可以通过这个URI来连接到WebSocket。类似Servlet的注解mapping。无需在web.xml中配置。
 @ServerEndpoint(value="/websocket")
 public class MyWebSocket {
+	
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
      
@@ -27,7 +28,7 @@ public class MyWebSocket {
      * @param session  可选的参数。session为与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
     @OnOpen
-    public void onOpen(Session session){
+    public void onOpen(Session session) {
         this.session = session;
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1
@@ -38,23 +39,26 @@ public class MyWebSocket {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(){
+    public void onClose() {
         webSocketSet.remove(this);  //从set中删除
         subOnlineCount();           //在线数减1    
         System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
     }
      
     /**
+     * @onMessage 注解的方法用于接收传入的WebSocket信息。 这个信息可以是文本，二进制。
+     * 
      * 收到客户端消息后调用的方法
      * @param message 客户端发送过来的消息
      * @param session 可选的参数
+     * MaxMessageSize属性可以被用来定义 消息字节最大大小
      */
     @OnMessage
     public void onMessage(String message, Session session) {
         System.out.println("来自客户端的消息:" + message);
          
         //群发消息
-        for(MyWebSocket item: webSocketSet){             
+        for(MyWebSocket item: webSocketSet) {             
             try {
                 item.sendMessage(message);
             } catch (IOException e) {
@@ -70,7 +74,7 @@ public class MyWebSocket {
      * @param error
      */
     @OnError
-    public void onError(Session session, Throwable error){
+    public void onError(Session session, Throwable error) {
         System.out.println("发生错误");
         error.printStackTrace();
     }
@@ -80,7 +84,7 @@ public class MyWebSocket {
      * @param message
      * @throws IOException
      */
-    public void sendMessage(String message) throws IOException{
+    public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
         //this.session.getAsyncRemote().sendText(message);
     }
