@@ -42,13 +42,9 @@ public class LoginServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		UserDao dao = new UserDao();
-		try {
-			if(dao.get(username, password)) {
-				request.getSession().setAttribute("username", username);
-				request.getRequestDispatcher("/views/chat.jsp").forward(request, response);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if(dao.get(username, password)) {
+			request.getSession().setAttribute("username", username);
+			request.getRequestDispatcher("/views/chat.jsp").forward(request, response);
 		}
 		
 	}

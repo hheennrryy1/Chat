@@ -2,7 +2,7 @@
    
   //判断当前浏览器是否支持WebSocket
   if('WebSocket' in window){
-	websocket = new WebSocket("ws://localhost:8888/Chat/websocket");
+	websocket = new WebSocket("ws://119.29.193.33/Chat/websocket");
   }
   else{
 	  setMessageInnerHTML("不支持");

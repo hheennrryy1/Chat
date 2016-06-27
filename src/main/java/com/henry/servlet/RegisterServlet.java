@@ -39,12 +39,8 @@ public class RegisterServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		System.out.println(username);
 		UserDao dao = new UserDao();
-		try {
-			dao.add(username, password);
-			response.sendRedirect("login.html");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		dao.add(username, password);
+		response.sendRedirect("login.html");
 	}
 
 }
